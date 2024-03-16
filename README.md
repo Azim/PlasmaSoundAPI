@@ -7,6 +7,8 @@ A library for playing AudioClips in Plasma
 
 `EventInstance PlasmaSoundAPI.PlaySound3D(AudioClip audioclip, Vector3 position)` - play 3D sound at given position
 
+[Complete example](https://gist.github.com/Azim/50a725614c346077fa57488e3aa411b6) using both of the above methods to play sound from console command.
+
 ---
 Dont forget to add 
 ```c#
