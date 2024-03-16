@@ -110,7 +110,8 @@ namespace Azim.PlasmaSoundAPI
                 FMOD.SOUND_FORMAT.PCMFLOAT,
                 audioclip.frequency,
                 // The sample data that will be copied into the sound when we create it 
-                audioclip_data);
+                audioclip_data,
+                is3d);
 
             EventInstance soundInstance = FMODUnity.RuntimeManager.CreateInstance(is3d ? sound3d : sound2d);
 
@@ -173,7 +174,14 @@ namespace Azim.PlasmaSoundAPI
                         soundInfo.numchannels = clip.channels;
 
                         // Creating the sound using soundInfo
-                        FMOD.RESULT result = ERRCHECK(FMODUnity.RuntimeManager.CoreSystem.createSound(clip.name, FMOD.MODE.OPENUSER, ref soundInfo, out FMOD.Sound sound), "Failed to create sound");
+                        FMOD.RESULT result = ERRCHECK(FMODUnity.RuntimeManager.CoreSystem.createSound(
+                            clip.name, 
+                            FMOD.MODE.OPENUSER | (clip.is3D ? FMOD.MODE._3D : 0), 
+                            ref soundInfo, 
+                            out FMOD.Sound sound), 
+
+                        "Failed to create sound");
+
                         if (result != FMOD.RESULT.OK)
                             return result;
 
@@ -190,7 +198,7 @@ namespace Azim.PlasmaSoundAPI
                         if (result != FMOD.RESULT.OK)
                             return result;
 
-                        ERRCHECK(sound.setMode(FMOD.MODE.DEFAULT), "Failed to set the sound mode");
+                        ERRCHECK(sound.setMode(FMOD.MODE.DEFAULT | (clip.is3D ? FMOD.MODE._3D : 0)), "Failed to set the sound mode");
 
 
                         if (result == FMOD.RESULT.OK)
@@ -250,8 +258,9 @@ namespace Azim.PlasmaSoundAPI
         public FMOD.SOUND_FORMAT format;
         public int defaultFrequency;
         public float[] sampleData;
+        public bool is3D;
 
-        public SoundRequirements(string name, int samples, int channel, FMOD.SOUND_FORMAT format, int defaultFrequency, float[] sampleData)
+        public SoundRequirements(string name, int samples, int channel, FMOD.SOUND_FORMAT format, int defaultFrequency, float[] sampleData, bool is3D)
         {
             this.name = name;
             this.samples = samples;
@@ -259,6 +268,7 @@ namespace Azim.PlasmaSoundAPI
             this.format = format;
             this.defaultFrequency = defaultFrequency;
             this.sampleData = sampleData;
+            this.is3D = is3D;
         }
     }
 }
