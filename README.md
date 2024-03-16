@@ -16,5 +16,9 @@ annotation to your mod to ensure that the library is loaded before your mod.
 
 # Releases
 
+### 1.0.1
+* Renamed assembly file and namespace to fix import issues
+* Fixed sound banks not loading
+
 ### 1.0.0
 * Initial release

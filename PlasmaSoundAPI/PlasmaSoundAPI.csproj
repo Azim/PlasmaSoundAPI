@@ -8,7 +8,7 @@
         <Version>1.0.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
-        <RootNamespace>PlasmaSoundAPI</RootNamespace>
+        <RootNamespace>Azim.PlasmaSoundAPI</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -52,7 +52,7 @@
 
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Users\figaR\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MyTest\BepInEx\plugins\$(ProjectName).dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(SolutionDir)\publish\$(ProjectName).dll&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)\README.md&quot; &quot;$(SolutionDir)\publish\README.md&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)\LICENSE&quot; &quot;$(SolutionDir)\publish\LICENSE&quot;&#xD;&#xA;" />
+    <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Plasma\BepInEx\plugins\$(AssemblyName).dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(SolutionDir)\publish\$(AssemblyName).dll&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)\README.md&quot; &quot;$(SolutionDir)\publish\README.md&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)\LICENSE&quot; &quot;$(SolutionDir)\publish\LICENSE&quot;&#xD;&#xA;" />
   </Target>
 
 </Project>

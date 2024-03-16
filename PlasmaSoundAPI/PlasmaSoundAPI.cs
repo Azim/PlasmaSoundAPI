@@ -10,8 +10,13 @@ using FMODUnity;
 using FMOD.Studio;
 using System.IO;
 
-namespace PlasmaSoundAPI
+namespace Azim.PlasmaSoundAPI
 {
+    public class BankLoadException : Exception 
+    {
+        public BankLoadException(string message) : base(message) { }
+    }
+
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class PlasmaSoundAPI : BaseUnityPlugin
     {
@@ -36,7 +41,7 @@ namespace PlasmaSoundAPI
             }
             */
             
-            Harmony harmony = new Harmony("CustomNodeManagerTest");
+            Harmony harmony = new Harmony("PlasmaSoundAPI");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             mls.LogInfo("PlasmaSoundAPI initialized successfully");
@@ -52,20 +57,21 @@ namespace PlasmaSoundAPI
         }
 
 
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(AudioController), "Init")]
         internal static void loadDummyBank()
         {
+            if (loaded) return;
+
             dialogueCallback = new FMOD.Studio.EVENT_CALLBACK(PlayFileCallBackUsingAudioFile);
-            byte[] bankMemory =
-                ReadFully(Assembly.GetExecutingAssembly().GetManifestResourceStream("PlasmaSoundAPI.Modded.bank"));
+            byte[] bankMemory = ReadFully(Assembly.GetExecutingAssembly().GetManifestResourceStream("Azim.PlasmaSoundAPI.Modded.bank"));
             var result = RuntimeManager.StudioSystem.loadBankMemory(bankMemory, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out Bank bank);
             mls.LogInfo("Load bank result: " + result);
             
             if(result != FMOD.RESULT.OK)
             {
                 mls.LogError("Dummy sound bank not loaded, aborting");
-                return;
+                throw new BankLoadException("Dummy tank not loaded");
             }
             
             bank.getEventList(out EventDescription[] events);
@@ -85,8 +91,7 @@ namespace PlasmaSoundAPI
         {
             if (!loaded)
             {
-                mls.LogError("Dummy sound bank not loaded, aborting");
-                return new EventInstance(IntPtr.Zero);
+                loadDummyBank();
             }
 
             float[] audioclip_data = new float[audioclip.samples * audioclip.channels];
@@ -224,6 +229,11 @@ namespace PlasmaSoundAPI
         }
         private static byte[] ReadFully(Stream input)
         {
+            if(input == null)
+            {
+                throw new InvalidDataException("Stream is null");
+            }
+
             using (MemoryStream ms = new MemoryStream())
             {
                 input.CopyTo(ms);
@@ -241,15 +251,6 @@ namespace PlasmaSoundAPI
         public int defaultFrequency;
         public float[] sampleData;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="samples"></param>
-        /// <param name="channel"></param>
-        /// <param name="format"></param>
-        /// <param name="defaultFrequency"></param>
-        /// <param name="sampleData"></param>
         public SoundRequirements(string name, int samples, int channel, FMOD.SOUND_FORMAT format, int defaultFrequency, float[] sampleData)
         {
             this.name = name;
