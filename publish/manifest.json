@@ -1,0 +1,9 @@
+{
+    "name": "PlasmaSoundAPI",
+    "version_number": "1.0.0",
+	"website_url":"https://github.com/Azim/PlasmaSoundAPI",
+    "description": "A library for playing AudioClips in Plasma",
+    "dependencies": [
+		"BepInEx-BepInExPack-5.4.2100"
+	]
+}

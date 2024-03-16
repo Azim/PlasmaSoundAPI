@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>Azim.PlasmaSoundAPI</AssemblyName>
+        <Description>PlasmaSoundAPI</Description>
+        <Version>1.0.0</Version>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <RootNamespace>PlasmaSoundAPI</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Modded.bank" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.Core" Version="5.*" />
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+        <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+    </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\References\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\References\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="FMODUnity">
+      <HintPath>..\..\References\FMODUnity.dll</HintPath>
+    </Reference>
+    <Reference Include="FMODUnityResonance">
+      <HintPath>..\..\References\FMODUnityResonance.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\References\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\References\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Users\figaR\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\MyTest\BepInEx\plugins\$(ProjectName).dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(SolutionDir)\publish\$(ProjectName).dll&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)\README.md&quot; &quot;$(SolutionDir)\publish\README.md&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)\LICENSE&quot; &quot;$(SolutionDir)\publish\LICENSE&quot;&#xD;&#xA;" />
+  </Target>
+
+</Project>
